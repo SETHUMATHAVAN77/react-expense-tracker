@@ -14,10 +14,6 @@ import {
 } from "firebase/firestore";
 import { db } from "../utils/firebase/firebase";
 
-// let transactionsData = localStorage.getItem("transactions")
-//   ? JSON.parse(localStorage.getItem("transactions"))
-//   : [];
-
 const FormControl = ({ showAlert }) => {
   const [transactionName, setTransactionName] = useState("");
   const [amount, setAmount] = useState("");
@@ -26,10 +22,6 @@ const FormControl = ({ showAlert }) => {
   const [editId, setEditId] = useState("");
   const [selectedOption, setSelectedOption] = useState("positive");
 
-  // calling local storage whenever list changes
-  // useEffect(() => {
-  //   localStorage.setItem("transactions", JSON.stringify(transactions));
-  // }, [transactions]);
   useEffect(() => {
     const q = query(collection(db, "transactions"), orderBy("created", "desc"));
 
@@ -67,8 +59,6 @@ const FormControl = ({ showAlert }) => {
 
   // delete transaction
   const deleteTransaction = async (id) => {
-    // const filteredItem = transactions.filter((item) => item.id !== id);
-    // setTransactions(filteredItem);
     try {
       const itemToEditRef = await doc(db, "transactions", id);
       await deleteDoc(itemToEditRef);
@@ -112,23 +102,11 @@ const FormControl = ({ showAlert }) => {
         const itemToEditRef = await doc(db, "transactions", editId);
         await updateDoc(itemToEditRef, {
           title: transactionName,
-          amount: amount,
+          amount: radioButton(amount),
         });
       } catch (err) {
         console.log(err);
       }
-      // const editList = transactions.map((transaction) => {
-      //   if (transaction.id === editId) {
-      //     return {
-      //       ...transaction,
-      //       title: transactionName,
-      //       amount: radioButton(amount),
-      //     };
-      //   } else {
-      //     return transaction;
-      //   }
-      // });
-      // setTransactions(editList);
       showAlert({
         msg: "Transaction Updated Successfully !",
         type: "transaction",
@@ -149,7 +127,7 @@ const FormControl = ({ showAlert }) => {
       try {
         await addDoc(collection(db, "transactions"), {
           title: transactionName,
-          amount: amount,
+          amount: radioButton(amount),
           created: Timestamp.now(),
         });
 
