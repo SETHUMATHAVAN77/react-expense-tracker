@@ -1,24 +1,50 @@
 import React, { useState, useEffect } from "react";
 import List from "./List";
 import AmountContainer from "./AmountContainer";
-import { v4 as uuidv4 } from "uuid";
+import {
+  collection,
+  addDoc,
+  Timestamp,
+  query,
+  orderBy,
+  onSnapshot,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../utils/firebase/firebase";
 
-let transactionsData = localStorage.getItem("transactions")
-  ? JSON.parse(localStorage.getItem("transactions"))
-  : [];
+// let transactionsData = localStorage.getItem("transactions")
+//   ? JSON.parse(localStorage.getItem("transactions"))
+//   : [];
 
 const FormControl = ({ showAlert }) => {
   const [transactionName, setTransactionName] = useState("");
   const [amount, setAmount] = useState("");
-  const [transactions, setTransactions] = useState(transactionsData);
+  const [transactions, setTransactions] = useState([]);
   const [isEditing, setisEditing] = useState(false);
   const [editId, setEditId] = useState("");
   const [selectedOption, setSelectedOption] = useState("positive");
 
   // calling local storage whenever list changes
+  // useEffect(() => {
+  //   localStorage.setItem("transactions", JSON.stringify(transactions));
+  // }, [transactions]);
   useEffect(() => {
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-  }, [transactions]);
+    const q = query(collection(db, "transactions"), orderBy("created", "desc"));
+
+    onSnapshot(q, (querySnapShot) => {
+      setTransactions(
+        querySnapShot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+          };
+        })
+      );
+    });
+  }, []);
 
   // radio button
   function radioButton(amount) {
@@ -40,9 +66,15 @@ const FormControl = ({ showAlert }) => {
   }
 
   // delete transaction
-  const deleteTransaction = (id) => {
-    const filteredItem = transactions.filter((item) => item.id !== id);
-    setTransactions(filteredItem);
+  const deleteTransaction = async (id) => {
+    // const filteredItem = transactions.filter((item) => item.id !== id);
+    // setTransactions(filteredItem);
+    try {
+      const itemToEditRef = await doc(db, "transactions", id);
+      await deleteDoc(itemToEditRef);
+    } catch (err) {
+      console.log(err);
+    }
     showAlert({
       msg: "Transaction Deleted Successfully !",
       type: "transaction",
@@ -67,7 +99,7 @@ const FormControl = ({ showAlert }) => {
   };
 
   // form submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!transactionName || !amount) {
@@ -76,18 +108,27 @@ const FormControl = ({ showAlert }) => {
         type: "transaction",
       });
     } else if (transactionName && amount && isEditing) {
-      const editList = transactions.map((transaction) => {
-        if (transaction.id === editId) {
-          return {
-            ...transaction,
-            title: transactionName,
-            amount: radioButton(amount),
-          };
-        } else {
-          return transaction;
-        }
-      });
-      setTransactions(editList);
+      try {
+        const itemToEditRef = await doc(db, "transactions", editId);
+        await updateDoc(itemToEditRef, {
+          title: transactionName,
+          amount: amount,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      // const editList = transactions.map((transaction) => {
+      //   if (transaction.id === editId) {
+      //     return {
+      //       ...transaction,
+      //       title: transactionName,
+      //       amount: radioButton(amount),
+      //     };
+      //   } else {
+      //     return transaction;
+      //   }
+      // });
+      // setTransactions(editList);
       showAlert({
         msg: "Transaction Updated Successfully !",
         type: "transaction",
@@ -98,17 +139,27 @@ const FormControl = ({ showAlert }) => {
       setEditId("");
     } else {
       const newTransaction = {
-        id: uuidv4(),
         title: transactionName,
         amount: radioButton(amount),
       };
       setTransactions([...transactions, newTransaction]);
       setTransactionName("");
       setAmount("");
-      showAlert({
-        msg: "Transaction Added Successfully !",
-        type: "transaction",
-      });
+
+      try {
+        await addDoc(collection(db, "transactions"), {
+          title: transactionName,
+          amount: amount,
+          created: Timestamp.now(),
+        });
+
+        showAlert({
+          msg: "Transaction Added Successfully !",
+          type: "transaction",
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
