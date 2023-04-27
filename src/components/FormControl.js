@@ -37,6 +37,20 @@ const FormControl = ({ showAlert }) => {
       );
     });
   }, []);
+  // if (auth.currentUser) {
+  //   const userId = auth.currentUser.uid;
+  //   // Access other properties of the currentUser object
+  // } else {
+  //   // Handle the case when the user is not signed in
+  //   console.log("sss");
+  // }
+
+  //  const userId = auth.currentUser.uid;
+
+  //   await db.ref(`users/${userId}`).set({
+  //     email: auth.currentUser.email,
+  //     // other user data
+  //   });
 
   // radio button
   function radioButton(amount) {
@@ -143,81 +157,83 @@ const FormControl = ({ showAlert }) => {
 
   return (
     <>
-      <AmountContainer transactions={transactions} />
-      {transactions.length > 0 && (
-        <div className="history-container">
-          <div className="history-title">
-            <h2>History</h2>
+      <div className="main">
+        <AmountContainer transactions={transactions} />
+        {transactions.length > 0 && (
+          <div className="history-container">
+            <div className="history-title">
+              <h2>History</h2>
+            </div>
+            <List
+              transactions={transactions}
+              deleteTransaction={deleteTransaction}
+              editTransaction={editTransaction}
+            />
           </div>
-          <List
-            transactions={transactions}
-            deleteTransaction={deleteTransaction}
-            editTransaction={editTransaction}
+        )}
+
+        <h2 className="input-title">Add New Transaction</h2>
+
+        <form className="input-container" onSubmit={handleSubmit}>
+          {/* <!-- radio --> */}
+
+          <div className="radio-container">
+            <div className="income-radio">
+              <input
+                type="radio"
+                id="income-radio"
+                name="radio"
+                value="positive"
+                checked={selectedOption === "positive"}
+                onChange={handleRadio}
+              />
+              <label htmlFor="income-radio" className="income-radio">
+                Income
+              </label>
+            </div>
+            <div className="expense-radio">
+              <input
+                type="radio"
+                id="expense-radio"
+                name="radio"
+                value="negative"
+                checked={selectedOption === "negative"}
+                onChange={handleRadio}
+              />
+              <label htmlFor="expense-radio" className="expense-radio">
+                Expense
+              </label>
+            </div>
+          </div>
+
+          <label htmlFor="transaction">Transaction</label>
+          <input
+            style={{ marginBottom: "10px" }}
+            type="text"
+            id="transaction"
+            placeholder="Enter Transaction..."
+            name="rents"
+            value={transactionName}
+            onChange={(e) => setTransactionName(e.target.value)}
+            autoComplete="off"
+            required
           />
-        </div>
-      )}
-
-      <h2 className="input-title">Add New Transaction</h2>
-
-      <form className="input-container" onSubmit={handleSubmit}>
-        {/* <!-- radio --> */}
-
-        <div className="radio-container">
-          <div className="income-radio">
-            <input
-              type="radio"
-              id="income-radio"
-              name="radio"
-              value="positive"
-              checked={selectedOption === "positive"}
-              onChange={handleRadio}
-            />
-            <label htmlFor="income-radio" className="income-radio">
-              Income
-            </label>
-          </div>
-          <div className="expense-radio">
-            <input
-              type="radio"
-              id="expense-radio"
-              name="radio"
-              value="negative"
-              checked={selectedOption === "negative"}
-              onChange={handleRadio}
-            />
-            <label htmlFor="expense-radio" className="expense-radio">
-              Expense
-            </label>
-          </div>
-        </div>
-
-        <label htmlFor="transaction">Transaction</label>
-        <input
-          style={{ marginBottom: "10px" }}
-          type="text"
-          id="transaction"
-          placeholder="Enter Transaction..."
-          name="rents"
-          value={transactionName}
-          onChange={(e) => setTransactionName(e.target.value)}
-          autoComplete="off"
-          required
-        />
-        <label htmlFor="amount-input">Amount</label>
-        <input
-          type="number"
-          id="amount-input"
-          placeholder="Enter Amount (₹)"
-          autoComplete="off"
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
-          name="amount"
-          required
-        />
-        <button className="button" type="submit">
-          {isEditing ? "Update Transaction" : "Add Transaction"}
-        </button>
-      </form>
+          <label htmlFor="amount-input">Amount</label>
+          <input
+            type="number"
+            id="amount-input"
+            placeholder="Enter Amount (₹)"
+            autoComplete="off"
+            value={amount}
+            onChange={(e) => setAmount(Number(e.target.value))}
+            name="amount"
+            required
+          />
+          <button className="button" type="submit">
+            {isEditing ? "Update Transaction" : "Add Transaction"}
+          </button>
+        </form>
+      </div>
     </>
   );
 };

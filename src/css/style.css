@@ -44,7 +44,7 @@ html {
 body {
   font-family: "Roboto", sans-serif;
   background-color: #f6d8ae;
-  background-image: linear-gradient(45deg, #c24fa9 0%, #14945c 100%);
+  background-image: url("https://res.cloudinary.com/doqmdeqem/image/upload/v1682485882/money_sjlujc.jpg");
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -91,6 +91,29 @@ body {
 .balance {
   color: #1768ac;
   font-size: 1.35rem;
+}
+.signButton {
+  margin: 12px;
+  height: 50px;
+  width: 120px;
+  border-radius: 10px;
+  background: #333;
+  justify-content: center;
+  align-items: center;
+  box-shadow: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #444,
+    inset -5px -5px 10px #222;
+  font-family: "Damion", cursive;
+  border: none;
+  font-size: 16px;
+  color: rgb(161, 161, 161);
+  transition: 500ms;
+}
+
+.signButton:hover {
+  box-shadow: -5px -5px 15px #444, 5px 5px 15px #222, inset 5px 5px 10px #222,
+    inset -5px -5px 10px #444;
+  color: #d6d6d6;
+  transition: 500ms;
 }
 
 .output-container {
