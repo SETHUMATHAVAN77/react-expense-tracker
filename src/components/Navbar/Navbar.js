@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Tooltip from "react-bootstrap/Tooltip";
 import { OverlayTrigger } from "react-bootstrap";
 import { UserAuth } from "../../context/AuthContext";
-import { ToastContainer } from "react-toastify";
 import userLogo from "../../assets/images/user.jpg";
 import { FaBars } from "react-icons/fa";
 
@@ -34,28 +33,29 @@ const NavBar = () => {
             <FaBars />
           </button>
         </div>
-        <ToastContainer position="top-right" />
-        <OverlayTrigger
-          placement="left"
-          delay={{ show: 200, hide: 100 }}
-          overlay={renderTooltip}
-        >
-          <div>
-            <Link to={`/userinfo/${user?.uid}`}>
-              <img
-                src={`${imageAsset ? imageAsset : userLogo}`}
-                alt="user-logo"
-                className="w-[40px] h-[40px] rounded-full"
-              />
-            </Link>
-          </div>
-        </OverlayTrigger>
-        <Link
-          to={"/"}
-          className="px-5 py-3 font-semibold rounded-xl bg-red-600 text-white cursor-pointer"
-        >
-          Sign Out
-        </Link>
+        <div className="flex gap-x-3 items-center">
+          <OverlayTrigger
+            placement="left"
+            delay={{ show: 200, hide: 100 }}
+            overlay={renderTooltip}
+          >
+            <div>
+              <Link to={`/userinfo/${user?.uid}`}>
+                <img
+                  src={`${imageAsset ? imageAsset : userLogo}`}
+                  alt="user-logo"
+                  className="w-[40px] h-[40px] rounded-full"
+                />
+              </Link>
+            </div>
+          </OverlayTrigger>
+          <Link
+            to={"/"}
+            className="px-5 py-3 font-semibold rounded-xl bg-red-600 text-white cursor-pointer"
+          >
+            Sign Out
+          </Link>
+        </div>
       </div>
     </nav>
   );

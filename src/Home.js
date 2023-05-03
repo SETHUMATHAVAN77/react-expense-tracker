@@ -5,6 +5,7 @@ import FormControl from "./components/FormControl";
 import SocialMedia from "./components/SocialIcons";
 import { FaCoins } from "react-icons/fa";
 import { UserAuth } from "./context/AuthContext";
+import { ToastContainer } from "react-toastify";
 
 const Home = ({ fetchUserDetails }) => {
   const { user } = UserAuth();
@@ -22,6 +23,7 @@ const Home = ({ fetchUserDetails }) => {
     <>
       <div className="main">
         <NavBar />
+        <ToastContainer position="top-right" />
         <h1 className="main-title flex gap-x-2">
           <FaCoins />
           Expense Tracker
