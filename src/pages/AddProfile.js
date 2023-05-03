@@ -78,7 +78,6 @@ const AddProfile = () => {
           const uploadProgress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log(uploadProgress);
-          toast.promise("uploading...Please wait...");
         },
         (error) => {
           toast.error(`Error while uploading : Try Again...`);

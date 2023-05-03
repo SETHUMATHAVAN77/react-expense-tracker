@@ -1,35 +1,52 @@
 import React from "react";
 import { MdDelete } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
+import { UserAuth } from "../context/AuthContext";
 
 const List = ({ transactions, deleteTransaction, editTransaction }) => {
+  const { user } = UserAuth();
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    return user && transaction.userId === user.uid;
+  });
+
   return (
     <>
-      {transactions.map((transaction) => {
-        const { id, title, amount } = transaction;
-
-        return (
-          <ul className="lists" key={id}>
-            <li className={amount > 0 ? "plus" : "minus"}>
-              <span>{title}</span> <span> {amount}</span>
-              <button
-                className="update-btn btn"
-                type="button"
-                onClick={() => editTransaction(id)}
+      <div>
+        {filteredTransactions.length > 0 ? (
+          <ul className="lists">
+            {filteredTransactions.map((transaction) => (
+              <li
+                key={transaction.id}
+                className={transaction.amount > 0 ? "plus" : "minus"}
               >
-                <AiFillEdit />
-              </button>
-              <button
-                type="button"
-                className="delete-btn btn"
-                onClick={() => deleteTransaction(id)}
-              >
-                <MdDelete />
-              </button>
-            </li>
+                <span>{transaction.title}</span>{" "}
+                <span> {transaction.amount}</span>
+                <button
+                  className="update-btn btn"
+                  type="button"
+                  onClick={() => editTransaction(transaction.id)}
+                >
+                  <AiFillEdit />
+                </button>
+                <button
+                  type="button"
+                  className="delete-btn btn"
+                  onClick={() => deleteTransaction(transaction.id)}
+                >
+                  <MdDelete />
+                </button>
+              </li>
+            ))}
           </ul>
-        );
-      })}
+        ) : (
+          <div className="bg-yellow-200 p-2 rounded-lg ">
+            <small className="font-semibold">
+              You don't have any transactions
+            </small>
+          </div>
+        )}
+      </div>
     </>
   );
 };

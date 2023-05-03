@@ -31,7 +31,7 @@ const SignUp = () => {
             className="fixed w-full"
           />
           <div className="fixed w-full px-4 py-14 z-50 ">
-            <div className="max-w-[450px] h-[462px] mx-auto bg-black/80 text-white rounded-md shadow-xl">
+            <div className="max-w-[450px] h-[530px] mx-auto bg-black/80 text-white rounded-md shadow-xl">
               <div className="max-w-[320px] mx-auto py-16 px-2 md:px-0">
                 <div className="logo-login text-center ">
                   <img
@@ -51,7 +51,7 @@ const SignUp = () => {
                 >
                   <input
                     onChange={(e) => setEmail(e.target.value)}
-                    className="p-3 my-2 bg-gray-700 rounded"
+                    className="p-3 my-2 s-email lowercase bg-gray-700 rounded"
                     type="email"
                     placeholder="Email"
                     autoComplete="email"

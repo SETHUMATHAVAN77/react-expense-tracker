@@ -13,6 +13,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../utils/firebase/firebase";
+import { UserAuth } from "../context/AuthContext";
 
 const FormControl = ({ showAlert }) => {
   const [transactionName, setTransactionName] = useState("");
@@ -21,6 +22,7 @@ const FormControl = ({ showAlert }) => {
   const [isEditing, setisEditing] = useState(false);
   const [editId, setEditId] = useState("");
   const [selectedOption, setSelectedOption] = useState("positive");
+  const { user } = UserAuth();
 
   useEffect(() => {
     const q = query(collection(db, "transactions"), orderBy("created", "desc"));
@@ -29,6 +31,7 @@ const FormControl = ({ showAlert }) => {
       setTransactions(
         querySnapShot.docs.map((doc) => {
           const data = doc.data();
+          console.log(data);
           return {
             id: doc.id,
             ...data,
@@ -36,21 +39,8 @@ const FormControl = ({ showAlert }) => {
         })
       );
     });
-  }, []);
-  // if (auth.currentUser) {
-  //   const userId = auth.currentUser.uid;
-  //   // Access other properties of the currentUser object
-  // } else {
-  //   // Handle the case when the user is not signed in
-  //   console.log("sss");
-  // }
-
-  //  const userId = auth.currentUser.uid;
-
-  //   await db.ref(`users/${userId}`).set({
-  //     email: auth.currentUser.email,
-  //     // other user data
-  //   });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, user?.uid, transactions]);
 
   // radio button
   function radioButton(amount) {
@@ -130,21 +120,15 @@ const FormControl = ({ showAlert }) => {
       setisEditing(false);
       setEditId("");
     } else {
-      const newTransaction = {
-        title: transactionName,
-        amount: radioButton(amount),
-      };
-      setTransactions([...transactions, newTransaction]);
-      setTransactionName("");
-      setAmount("");
-
       try {
         await addDoc(collection(db, "transactions"), {
           title: transactionName,
           amount: radioButton(amount),
           created: Timestamp.now(),
+          userId: user?.uid,
         });
-
+        setTransactionName("");
+        setAmount("");
         showAlert({
           msg: "Transaction Added Successfully !",
           type: "transaction",
@@ -180,6 +164,7 @@ const FormControl = ({ showAlert }) => {
           <div className="radio-container">
             <div className="income-radio">
               <input
+                className="capitalize"
                 type="radio"
                 id="income-radio"
                 name="radio"

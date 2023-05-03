@@ -4,7 +4,6 @@ import AuthContextProvider from "./context/AuthContext";
 
 import "./css/style.css";
 import "./css/normalize.css";
-import "./index.css";
 
 import App from "./App";
 

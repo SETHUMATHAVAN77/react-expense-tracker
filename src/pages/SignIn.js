@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
-import SocialMedia from "../components/SocialIcons";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -24,14 +23,14 @@ const SignIn = () => {
   };
   return (
     <>
-      <div className="w-full h-screen mx-auto bg-slate-600 flex justify-center items-center min-h-[100vh] in">
+      <div className="w-full h-screen mx-auto bg-slate-600 flex justify-center items-center min-h-[100vh] i">
         <img
           src="https://res.cloudinary.com/doqmdeqem/image/upload/v1682485882/money_sjlujc.jpg"
           alt="bg"
           className="fixed w-full"
         />
         <div className="fixed w-full px-4 py-20 z-50 ">
-          <div className="max-w-[450px] h-[480px] mx-auto bg-black/80 text-white rounded-md">
+          <div className="max-w-[450px] h-[530px] -mt-4 mx-auto bg-black/80 text-white rounded-md">
             <div className="max-w-[320px] mx-auto py-16 px-3 md:px-0">
               <div className="logo-login text-center ">
                 <img
@@ -48,7 +47,7 @@ const SignIn = () => {
                 className="w-full flex flex-col py-4"
               >
                 <input
-                  className="p-3 my-2 bg-gray-700 rounded"
+                  className="p-3 s-email my-2 lowercase bg-gray-700 rounded"
                   type="email"
                   placeholder="Email"
                   autoComplete="email"

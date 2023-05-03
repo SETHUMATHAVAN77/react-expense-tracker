@@ -39,6 +39,7 @@ const App = () => {
       querySnapshot.docs.map((doc) => {
         setDocId(doc.id);
         const userData = doc.data();
+        console.log(userData.userId);
         if (userData) {
           setUserId(userData.userId);
           setUserName(userData.userName);
