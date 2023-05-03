@@ -1,31 +1,37 @@
 import React, { useState, useEffect } from "react";
-
 import { GiTakeMyMoney, GiReceiveMoney, GiPayMoney } from "react-icons/gi";
+import { UserAuth } from "../context/AuthContext";
 
 const AmountContainer = ({ transactions }) => {
   const [balance, setBalance] = useState("0.00");
   const [income, setIncome] = useState("0.00");
   const [expense, setExpense] = useState("0.00");
+  const { user } = UserAuth();
 
   useEffect(() => {
+    const filteredTransactions = transactions.filter((transaction) => {
+      return user && transaction.userId === user.uid;
+    });
+
     // positive value
-    const plusAmount = transactions
+    const plusAmount = filteredTransactions
       .map((val) => val.amount)
       .filter((val) => val > 0)
       .reduce((preval, val) => preval + val, 0);
     setIncome(plusAmount);
 
     // negative value
-    const minusAmount = transactions
+    const minusAmount = filteredTransactions
       .map((val) => val.amount)
       .filter((val) => val < 0)
       .reduce((preval, val) => preval + val, 0);
     setExpense(minusAmount);
 
-    const totalAmt = transactions
+    const totalAmt = filteredTransactions
       .map((val) => val.amount)
       .reduce((preval, val) => preval + val, 0);
     setBalance(totalAmt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transactions]);
   return (
     <>
