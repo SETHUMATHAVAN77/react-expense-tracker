@@ -30,13 +30,11 @@ const AuthContextProvider = ({ children }) => {
 
   // signUp
   const signUp = (email, password) => {
-    clearUserData();
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   // login
   const logIn = (email, password) => {
-    clearUserData();
     return signInWithEmailAndPassword(auth, email, password);
   };
 
