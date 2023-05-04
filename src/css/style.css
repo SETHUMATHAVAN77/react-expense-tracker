@@ -82,6 +82,9 @@ body {
 
 .balance-container {
   margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .balance-title,

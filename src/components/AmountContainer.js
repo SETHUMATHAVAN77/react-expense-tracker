@@ -38,7 +38,7 @@ const AmountContainer = ({ transactions }) => {
       {/* balance amount */}
       <div className="balance-container">
         <h2 className="balance-title">
-          Your Balance <GiTakeMyMoney /> :
+          Your Balance <GiTakeMyMoney />
         </h2>
         <h3 className="balance amount-zero" id="balance">
           ₹{balance}
